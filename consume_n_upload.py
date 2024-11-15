@@ -6,7 +6,7 @@ formatted_date = current_datetime.strftime("%Y%m%d_%H%M%S")
 
 def main():
     credentials = pika.PlainCredentials('raspi', 'raspi')
-    connection = pika.BlockingConnection(pika.ConnectionParameters('192.168.0.106', 5672, '/', credentials))
+    connection = pika.BlockingConnection(pika.ConnectionParameters('192.168.0.100', 5672, '/', credentials))
     channel = connection.channel()
 
     channel.queue_declare(queue='opencv_retrieve')
@@ -14,7 +14,7 @@ def main():
     def callback(ch, method, properties, body):
         print(f" [x] Received {body}")
         #=============  API Upload  =============#
-        url = 'http://192.168.0.106:3000/ftp/upload-image'
+        url = 'http://192.168.0.100:3000/ftp/upload-image'
 
         with open(body, 'rb') as image_file:
             files = {'file': (body, image_file, 'image/jpeg')}
