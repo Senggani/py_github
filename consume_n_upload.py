@@ -1,4 +1,4 @@
-import requests, pika, sys, os
+import requests, pika, sys, os, json
 from datetime import datetime
 
 current_datetime = datetime.now()
@@ -13,13 +13,16 @@ def main():
     channel.queue_declare(queue='opencv_retrieve')
 
     def callback(ch, method, properties, body):
+        
+        json_str = json.loads(body)
+        
         print(f" [x] Received {body}")
         #=============  API Upload  =============#
         url = 'http://'+ip_addr+':3000/ftp/upload-image'
 
-        with open(body, 'rb') as image_file:
-            files = {'file': (body, image_file, 'image/jpeg')}
-            data = {'name': formatted_date, 'source': 'opencv', 'created_by': 'opencv'}
+        with open(json_str['full_path'], 'rb') as image_file:
+            files = {'file': (json_str['full_path'], image_file, 'image/jpeg')}
+            data = {'name': formatted_date, 'source': 'opencv', 'created_by': 'opencv', 'total_face': json_str['total_face'], 'total_body': json_str['total_body']}
             response = requests.post(url, files=files, data=data)
 
         if response.status_code == 200:
