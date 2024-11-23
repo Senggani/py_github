@@ -1,8 +1,6 @@
-import requests
 from datetime import datetime
 import cv2 as cv
-import time
-import pika
+import time, pika, json, requests
 
 path = "./image/"
 
@@ -63,11 +61,13 @@ while True:
   channel = connection.channel()
 
   channel.queue_declare(queue='opencv_status')
+  
+  message = ('{"full_path": "'+fullPath+'", "total_face": '+str(len(face))+', "total_body": '+str(len(body))+'}')
 
   channel.basic_publish(exchange='',
                         routing_key='opencv_status',
-                        body=fullPath)
-  print(" [x] Sent: " + fullPath)
+                        body=message)
+  print(" [x] Sent: " + message)
 
   connection.close()
   #------------- RMQ Produce  -------------#
