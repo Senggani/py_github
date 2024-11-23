@@ -30,21 +30,36 @@ while True:
   #=============    OpenCV    =============#
   gray_image = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
 
+  # Deteksi Wajah
   face_classifier = cv.CascadeClassifier("haarcascade_frontalface_default.xml")
 
   face = face_classifier.detectMultiScale(
     gray_image, scaleFactor=1.1, minNeighbors=5, minSize=(80, 80)
   )
-
+  
+  print("Total detected face = " + str(len(face)))
+  
   for (x, y, w, h) in face:
     cv.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 10)
+  
+  # Deteksi Tubuh
+  body_classifier = cv.CascadeClassifier("haarcascade_fullbody.xml")
+  
+  body = body_classifier.detectMultiScale(
+    gray_image, scaleFactor=1.1, minNeighbors=5, minSize=(80, 80)
+  )
+  
+  print("Total detected body = " + str(len(body)))
+
+  for (x, y, w, h) in body:
+    cv.rectangle(image, (x, y), (x + w, y + h), (255, 0, 0), 10)
       
   cv.imwrite(fullPath,  image)
   #-------------    OpenCV    -------------#
 
   #============= RMQ Produce  =============#
   credentials = pika.PlainCredentials('raspi', 'raspi')
-  connection = pika.BlockingConnection(pika.ConnectionParameters('192.168.0.100', 5672, '/', credentials))
+  connection = pika.BlockingConnection(pika.ConnectionParameters('192.168.0.104', 5672, '/', credentials))
   channel = connection.channel()
 
   channel.queue_declare(queue='opencv_status')
