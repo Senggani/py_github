@@ -3,11 +3,11 @@ from datetime import datetime
 
 current_datetime = datetime.now()
 formatted_date = current_datetime.strftime("%Y%m%d_%H%M%S")
-ip_addr = '192.168.0.104'
+ip_addr = '192.168.0.104:3000'
 
 def main():
-    credentials = pika.PlainCredentials('raspi', 'raspi')
-    connection = pika.BlockingConnection(pika.ConnectionParameters(ip_addr, 5672, '/', credentials))
+    credentials = pika.PlainCredentials(username='pm_modue', password='hl6GjO5LlRuQT1n')
+    connection = pika.BlockingConnection(pika.ConnectionParameters('rmq2.pptik.id', 5672, '/pm_module', credentials))
     channel = connection.channel()
 
     channel.queue_declare(queue='opencv_retrieve')
@@ -18,7 +18,7 @@ def main():
         
         print(f" [x] Received {body}")
         #=============  API Upload  =============#
-        url = 'http://'+ip_addr+':3000/ftp/upload-image'
+        url = 'http://'+ip_addr+'/ftp/upload-image'
 
         with open(json_str['full_path'], 'rb') as image_file:
             files = {'file': (json_str['full_path'], image_file, 'image/jpeg')}

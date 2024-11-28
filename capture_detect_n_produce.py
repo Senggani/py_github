@@ -56,8 +56,8 @@ while True:
   #-------------    OpenCV    -------------#
 
   #============= RMQ Produce  =============#
-  credentials = pika.PlainCredentials('raspi', 'raspi')
-  connection = pika.BlockingConnection(pika.ConnectionParameters('192.168.0.104', 5672, '/', credentials))
+  credentials = pika.PlainCredentials(username='pm_modue', password='hl6GjO5LlRuQT1n')
+  connection = pika.BlockingConnection(pika.ConnectionParameters('rmq2.pptik.id', 5672, '/pm_module', credentials))
   channel = connection.channel()
 
   channel.queue_declare(queue='opencv_status')
