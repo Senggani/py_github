@@ -3,7 +3,7 @@ from datetime import datetime
 
 current_datetime = datetime.now()
 formatted_date = current_datetime.strftime("%Y%m%d_%H%M%S")
-ip_addr = '192.168.0.104:3000'
+ip_addr = '192.168.12.214:3000'
 
 def main():
     credentials = pika.PlainCredentials(username='pm_modue', password='hl6GjO5LlRuQT1n')
