@@ -3,7 +3,7 @@ from datetime import datetime
 
 current_datetime = datetime.now()
 formatted_date = current_datetime.strftime("%Y%m%d_%H%M%S")
-ip_addr = '192.168.12.214:3000'
+ip_addr = '192.168.12.225:3000'
 
 def main():
     credentials = pika.PlainCredentials(username='pm_modue', password='hl6GjO5LlRuQT1n')
@@ -18,7 +18,7 @@ def main():
         
         print(f" [x] Received {body}")
         #=============  API Upload  =============#
-        url = 'http://'+ip_addr+'/ftp/upload-image'
+        url = 'http://'+ip_addr+'/pm-module/api/v1/ftp/upload-image'
 
         with open(json_str['full_path'], 'rb') as image_file:
             files = {'file': (json_str['full_path'], image_file, 'image/jpeg')}
